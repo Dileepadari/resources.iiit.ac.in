@@ -1,0 +1,45 @@
+.container{
+    display: flex;
+    align-items: center;
+    justify-items: space-around;
+    padding-top: 20px;
+}
+
+.logo{
+    flex: 1;
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.links{
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    padding: 10px;
+    justify-content: flex-end;
+}
+
+
+
+
+@media screen and (max-width: 900px){
+    .logo{
+        font-size: 30px;
+        text-align: left;
+    }
+}
+
+@media screen and (max-width: 600px){
+    .logo{
+        display: none;
+    }
+    .container{
+        width: 100%;
+        justify-content: space-between;
+    }
+    .links{
+        justify-content: end;
+    }
+}
