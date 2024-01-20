@@ -8,7 +8,6 @@ export default function Home({ searchParams }) {
     <div className={styles.container}>
       <div className={styles.content}>
         <Navbar />
-          Happy Coding...
       </div>
     </div>
   )
