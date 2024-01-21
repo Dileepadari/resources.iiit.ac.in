@@ -1,6 +1,7 @@
 import "./globals.css";
 import ThemeProvider from "@/providers/ThemeProvider";
 import ThemeContextProvider from "@/context/ThemeContext";
+import Navbar from "./components/Navbar/Navbar";
 
 export const metadata = {
   title: " IIITH Resources",
@@ -15,9 +16,8 @@ export default function RootLayout({ children }) {
             <ThemeProvider>
               <div className="container">
                 <div className="wrapper">
-
-                  {children}
-                  
+                  <Navbar />
+                  {children}                 
                 </div>
               </div>
             </ThemeProvider>
