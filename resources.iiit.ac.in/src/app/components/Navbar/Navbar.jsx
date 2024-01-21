@@ -6,8 +6,10 @@ const Navbar = () => {
         <div className={styles.container}>
             <Link className={styles.logo} href="/">IIIT&nbsp;Hyderabad</Link>
             <div className={styles.links}>
-                <Link href="/">Home</Link>
-                <Link href="/about">About</Link>
+                <Link className = {styles.eachlink} href="/">Home</Link>
+                <Link className = {styles.eachlink} href="/course">Courses</Link>
+                <Link className = {styles.eachlink} href="/about">About</Link>
+                <Link className = {styles.eachlink} href="/login">login</Link>
             </div>
         </div>
     )

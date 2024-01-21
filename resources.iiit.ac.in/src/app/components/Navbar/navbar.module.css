@@ -2,15 +2,18 @@
     display: flex;
     align-items: center;
     justify-items: space-around;
-    padding-top: 20px;
+    background-color: rgb(249, 77, 58);
+
 }
 
 .logo{
     flex: 1;
-    text-align: center;
+    /* text-align: center; */
     font-size: 36px;
     font-weight: 700;
+    padding-left: 50px;
     color: var(--text-color);
+    text-decoration: none;
 }
 
 .links{
@@ -18,7 +21,18 @@
     gap: 20px;
     flex: 1;
     padding: 10px;
+    padding-left: 200px;
+    text-decoration: none;
+    margin-right: 50px;
     justify-content: flex-end;
+}
+
+.eachlink{
+    font-size: 20px;
+    font-weight: 500;
+    color: white;
+    margin: 20px;
+    text-decoration: none;
 }
 
 
