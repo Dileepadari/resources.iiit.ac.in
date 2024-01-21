@@ -1,7 +1,11 @@
+"use client"
+import { useSession, signOut } from 'next-auth/react';
 import styles from './navbar.module.css'
 import Link from 'next/link'
 
-const Navbar = () => {
+const Navbar = ({user}) => {
+    const {data, status} = useSession();
+    console.log(status)
     return (
         <div className={styles.container}>
             <Link className={styles.logo} href="/">IIIT&nbsp;Hyderabad</Link>
@@ -9,7 +13,10 @@ const Navbar = () => {
                 <Link className = {styles.eachlink} href="/">Home</Link>
                 <Link className = {styles.eachlink} href="/course">Courses</Link>
                 <Link className = {styles.eachlink} href="/about">About</Link>
-                <Link className = {styles.eachlink} href="/login">login</Link>
+                {status === "authenticated" ?
+                <div className = {styles.eachlink} onClick={() => signOut()}>logout</div>
+                :
+                <Link className = {styles.eachlink} href="/login">login</Link>}
             </div>
         </div>
     )

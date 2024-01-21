@@ -1,11 +1,17 @@
+"use client";
 import React from "react";
-import Navbar from "../components/Navbar/Navbar";
 import styles from "./page.module.css";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function course() {
+    const router = useRouter();
+    const {data, status} = useSession();
+    if(status === "unauthenticated"){
+        router.replace('/login')
+    }
     return (
         <div>
-            <Navbar />
             <div className={styles.container}>
                 <input type="text" className={styles.searchbar} placeholder="Search Course Name.."></input>
                 <button className={styles.searchbutton}>Search</button>
