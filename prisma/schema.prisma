@@ -1,0 +1,88 @@
+// Prisma schema for the IIIT Hyderabad resource sharing platform.
+// The connection URL lives in prisma.config.ts (Prisma 7 no longer reads it here).
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum ResourceType {
+  NOTES
+  SLIDES
+  VIDEO
+  ASSIGNMENT
+  PAST_PAPER
+  BOOK
+  LINK
+}
+
+model User {
+  id        String     @id @default(cuid())
+  name      String
+  email     String     @unique
+  password  String
+  image     String?
+  role      Role       @default(STUDENT)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  courses   Course[]
+  resources Resource[]
+  votes     Vote[]
+}
+
+model Course {
+  id          String     @id @default(cuid())
+  code        String     @unique
+  name        String
+  description String
+  instructor  String?
+  semester    String?
+  tags        String[]   @default([])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  createdBy   User       @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String
+  resources   Resource[]
+
+  @@index([createdById])
+  @@index([name])
+}
+
+model Resource {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  url         String
+  type        ResourceType @default(NOTES)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  course      Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId    String
+  author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    String
+  votes       Vote[]
+
+  @@index([courseId])
+  @@index([authorId])
+}
+
+model Vote {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  resourceId String
+
+  @@unique([userId, resourceId])
+  @@index([resourceId])
+}

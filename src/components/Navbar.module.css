@@ -1,0 +1,162 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  min-height: var(--header-h);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin-right: auto;
+}
+
+.badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--brand-soft);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.brandText {
+  font-size: 15px;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.link {
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text-muted);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.link:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.linkActive {
+  color: var(--brand);
+  background: var(--brand-soft);
+  font-weight: 600;
+}
+
+.themeButton {
+  margin-left: 4px;
+  padding: 7px 12px;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.themeButton:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.signIn,
+.signOut {
+  margin-left: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.signIn {
+  background: var(--brand);
+  color: var(--brand-contrast);
+}
+.signIn:hover {
+  background: var(--brand-strong);
+}
+.signOut {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+.signOut:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.menuButton {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  place-items: center;
+}
+
+.menuIcon,
+.menuIcon::before,
+.menuIcon::after {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  content: "";
+  position: relative;
+}
+.menuIcon::before {
+  position: absolute;
+  top: -5px;
+}
+.menuIcon::after {
+  position: absolute;
+  top: 5px;
+}
+
+@media (max-width: 720px) {
+  .menuButton {
+    display: grid;
+  }
+  .links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 8px 0 16px;
+  }
+  .linksOpen {
+    display: flex;
+  }
+  .themeButton,
+  .signIn,
+  .signOut {
+    margin-left: 0;
+    text-align: center;
+  }
+}

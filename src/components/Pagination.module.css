@@ -1,0 +1,12 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.status {
+  font-size: 13.5px;
+  color: var(--text-muted);
+}

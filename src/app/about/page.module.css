@@ -1,0 +1,144 @@
+.head {
+  max-width: 640px;
+  padding: 40px 0 12px;
+}
+
+.title {
+  font-size: clamp(28px, 4.5vw, 40px);
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 16px 0 14px;
+}
+
+.lead {
+  font-size: 16.5px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.section {
+  margin-top: 52px;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.steps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.step {
+  display: flex;
+  gap: 14px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.stepNumber {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  color: var(--brand);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.stepTitle {
+  font-size: 15px;
+  font-weight: 650;
+  margin-bottom: 6px;
+}
+
+.stepBody {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.faqs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 760px;
+}
+
+.faq {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.faqQuestion {
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.faqQuestion::-webkit-details-marker {
+  display: none;
+}
+.faqQuestion::after {
+  content: "+";
+  font-size: 18px;
+  color: var(--text-faint);
+  font-weight: 400;
+}
+.faq[open] .faqQuestion::after {
+  content: "\2013";
+}
+
+.faqAnswer {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-top: 10px;
+  max-width: 66ch;
+}
+
+.cta {
+  margin-top: 56px;
+  padding: 36px;
+  border-radius: var(--radius-lg);
+  background: var(--brand-soft);
+  border: 1px solid transparent;
+  text-align: center;
+}
+
+.ctaTitle {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ctaText {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.ctaActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
