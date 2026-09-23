@@ -1,3 +1,5 @@
+<!-- Generated from README.md by scripts/build-light-readme.mjs. Do not edit by hand. -->
+
 <div align="center">
 
 <picture>
@@ -24,7 +26,7 @@
 
 **[Developer documentation](./DEVDOC.md)** &middot; [Screenshots](#screenshots) &middot; [Running it locally](#running-it-locally)
 
-<p><b>Dark mode</b> &middot; <a href="./README-light.md">View this page in light mode</a></p>
+<p><b>Light mode</b> &middot; <a href="./README.md">View this page in dark mode</a></p>
 
 </div>
 
@@ -44,12 +46,12 @@ This page shows **dark mode**; the same gallery in light mode is at
 
 | | |
 |---|---|
-| **Home** <br> What the library holds, and what was added recently <br><br> <img src="docs/screenshots/dark/01-home.png" alt="Home page" loading="lazy"> | **Courses** <br> Search by name, code, description or instructor, and filter by tag <br><br> <img src="docs/screenshots/dark/02-courses.png" alt="Course list" loading="lazy"> |
-| **A course** <br> Everything shared for it, ordered by upvotes and filterable by type <br><br> <img src="docs/screenshots/dark/03-course-detail.png" alt="Course page" loading="lazy"> | **Your profile** <br> What you added, what you shared, and the upvotes it earned <br><br> <img src="docs/screenshots/dark/06-profile.png" alt="Profile page" loading="lazy"> |
-| **Sign in** <br> Browsing needs no account; contributing does <br><br> <img src="docs/screenshots/dark/04-sign-in.png" alt="Sign in page" loading="lazy"> | **Add a course** <br> Create the page first, then hang resources off it <br><br> <img src="docs/screenshots/dark/07-add-course.png" alt="Add a course form" loading="lazy"> |
+| **Home** <br> What the library holds, and what was added recently <br><br> <img src="docs/screenshots/light/01-home.png" alt="Home page" loading="lazy"> | **Courses** <br> Search by name, code, description or instructor, and filter by tag <br><br> <img src="docs/screenshots/light/02-courses.png" alt="Course list" loading="lazy"> |
+| **A course** <br> Everything shared for it, ordered by upvotes and filterable by type <br><br> <img src="docs/screenshots/light/03-course-detail.png" alt="Course page" loading="lazy"> | **Your profile** <br> What you added, what you shared, and the upvotes it earned <br><br> <img src="docs/screenshots/light/06-profile.png" alt="Profile page" loading="lazy"> |
+| **Sign in** <br> Browsing needs no account; contributing does <br><br> <img src="docs/screenshots/light/04-sign-in.png" alt="Sign in page" loading="lazy"> | **Add a course** <br> Create the page first, then hang resources off it <br><br> <img src="docs/screenshots/light/07-add-course.png" alt="Add a course form" loading="lazy"> |
 
 <p align="center"><b>About</b> &middot; why the library exists, and the rules of the road</p>
-<p align="center"><img src="docs/screenshots/dark/05-about.png" alt="About page" loading="lazy"></p>
+<p align="center"><img src="docs/screenshots/light/05-about.png" alt="About page" loading="lazy"></p>
 
 ### Responsive
 
