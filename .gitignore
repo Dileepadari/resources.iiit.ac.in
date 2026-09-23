@@ -52,3 +52,6 @@ bun.lockb
 
 # certs
 *.pem
+
+# Screenshot harness, never committed
+public/__capture.html
