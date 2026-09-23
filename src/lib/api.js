@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { fieldErrors } from "@/lib/validation";
+import { HttpError, requireOwnership } from "@/lib/authz";
+
+// Re-exported so every route keeps importing both from one place, and so the
+// policy itself stays in a module with no framework imports.
+export { HttpError, requireOwnership };
 
 export function ok(data, status = 200) {
   return NextResponse.json(data, { status });
@@ -10,28 +15,10 @@ export function fail(message, status = 400, extra = {}) {
   return NextResponse.json({ message, ...extra }, { status });
 }
 
-/**
- * Thrown by requireUser / requireOwnership and turned into a response by
- * withErrorHandling, so route handlers can read as a straight line.
- */
-export class HttpError extends Error {
-  constructor(status, message, extra = {}) {
-    super(message);
-    this.status = status;
-    this.extra = extra;
-  }
-}
-
 export async function requireUser() {
   const user = await getCurrentUser();
   if (!user) throw new HttpError(401, "You must be signed in to do that");
   return user;
-}
-
-export function requireOwnership(user, ownerId) {
-  if (user.id !== ownerId && user.role !== "ADMIN") {
-    throw new HttpError(403, "You can only change your own contributions");
-  }
 }
 
 export async function parseBody(req, schema) {
