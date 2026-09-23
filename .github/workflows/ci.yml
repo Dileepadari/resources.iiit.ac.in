@@ -1,0 +1,145 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Dummies. The build never contacts a database, and the tests are pure
+  # functions, but Next and next-auth both refuse to start without these.
+  NEXTAUTH_URL: http://localhost:3000
+  NEXTAUTH_SECRET: ci-only-not-a-real-secret-0000000000000000000=
+
+jobs:
+  web:
+    name: Lint, test and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      # `prisma generate` runs on postinstall and needs no database.
+      - run: npm ci
+        env:
+          DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+
+      - run: npm run lint
+
+      - run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+
+  database:
+    name: The schema and seed build a database from nothing
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: resources
+          POSTGRES_PASSWORD: resources
+          POSTGRES_DB: resources_iiith
+        options: >-
+          --health-cmd "pg_isready -U resources -d resources_iiith"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+        ports: ['5432:5432']
+    env:
+      DATABASE_URL: postgresql://resources:resources@localhost:5432/resources_iiith?schema=public
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      # Without this the schema is only ever checked by whatever happens to be
+      # on a developer's machine, and a migration that cannot build a database
+      # from nothing is not discovered until a fresh clone fails.
+      - name: Push the schema
+        run: npx prisma db push
+
+      # The seed refuses to run anywhere but a local host. `localhost` is what
+      # the service container answers on, so the guard is exercised here rather
+      # than bypassed: if someone weakens it to allow a remote host, this job
+      # keeps passing but the guard test below stops.
+      - name: Seed
+        run: npm run db:seed
+
+      - name: The seed refuses a database that is not local
+        run: |
+          set +e
+          DATABASE_URL="postgresql://u:p@db.example.com:5432/real" node prisma/seed.js
+          status=$?
+          set -e
+          if [ "$status" -eq 0 ]; then
+            echo "The seed ran against a remote host. It deletes every row; that guard must hold."
+            exit 1
+          fi
+          echo "refused a remote host, as it should"
+
+      - name: The seeded data is there
+        run: |
+          npx prisma db execute --stdin <<'SQL'
+          DO $$
+          DECLARE users int; courses int; resources int;
+          BEGIN
+            SELECT count(*) INTO users FROM "User";
+            SELECT count(*) INTO courses FROM "Course";
+            SELECT count(*) INTO resources FROM "Resource";
+            RAISE NOTICE 'users=% courses=% resources=%', users, courses, resources;
+            IF users = 0 OR courses = 0 OR resources = 0 THEN
+              RAISE EXCEPTION 'the seed produced an empty database';
+            END IF;
+          END $$;
+          SQL
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+        env:
+          DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+
+      # Not a bare `npm audit --omit=dev`: the Prisma CLI is an optional peer
+      # dependency of @prisma/client and so counts as shipped, which would make
+      # the gate permanently red for build-time tooling. The script names each
+      # accepted advisory with the reason it cannot run here, and fails both on
+      # anything unexplained and on an exception that has gone stale.
+      - run: npm run audit:ci
+
+  hygiene:
+    name: No emoji, em dashes or decorative arrows
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - run: |
+          if grep -rnP '[\x{1F300}-\x{1FAFF}\x{2600}-\x{27BF}\x{2B00}-\x{2BFF}\x{2190}-\x{21FF}\x{2014}\x{2013}]' \
+               --include='*.js' --include='*.jsx' --include='*.mjs' --include='*.md' --include='*.css' \
+               --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=generated .; then
+            echo "Found emoji, an em/en dash or an arrow"
+            exit 1
+          fi
+          echo "clean"
