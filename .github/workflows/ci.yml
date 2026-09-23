@@ -108,6 +108,21 @@ jobs:
           END $$;
           SQL
 
+  readme-pair:
+    name: The light README matches its source
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      # README-light.md is generated, never hand-edited. Edit README.md, run the
+      # script, commit both; this fails when only one of the pair moved.
+      - run: |
+          node scripts/build-light-readme.mjs
+          git diff --exit-code README-light.md
+
   audit:
     name: Dependency audit
     runs-on: ubuntu-latest

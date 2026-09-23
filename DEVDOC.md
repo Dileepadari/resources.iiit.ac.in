@@ -254,6 +254,64 @@ a locally installed Postgres. `DATABASE_URL` in `.env.example` matches.
 Security headers (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`,
 `Permissions-Policy`) are set in `next.config.mjs`. `poweredByHeader` is off.
 
+## Tests
+
+```sh
+npm test      # 18 checks, under a second, no database and no network
+```
+
+Node's own test runner, deliberately: the suite covers pure functions, and a
+framework plus a bundler to run them would be more machinery than the thing
+being tested. `tests/alias-loader.mjs` teaches `node --test` the two resolution
+rules Next applies and Node does not, namely the `@/` alias from
+`jsconfig.json` and extensionless imports. It is a dozen lines and costs no
+dependencies.
+
+| File | What it pins |
+|---|---|
+| `tests/validation.test.mjs` | The schemas. That a resource link must be `http(s)`, because every link is rendered as a clickable anchor to every visitor; that a `role` sent by a client does not survive parsing; that an email is trimmed before it is validated |
+| `tests/rateLimit.test.mjs` | That the limiter refuses past the limit, that the window expires, that two callers do not share a bucket, and how `clientKey` reads a proxy header |
+| `tests/ownership.test.mjs` | That only an author or an admin may change a thing, and that a near-miss role string like `"admin"` or `"ADMIN "` grants nothing |
+
+`requireOwnership` lives in `src/lib/authz.js` rather than `src/lib/api.js` for
+exactly this reason: `api.js` imports `next/server`, which pulls in the
+framework resolver and cannot be loaded by a plain Node process. The policy has
+no framework imports, so it can be tested directly. `api.js` re-exports it, so
+every route still imports from one place.
+
+## Continuous integration
+
+`.github/workflows/ci.yml`, on push to `main`, on pull request, and on
+`workflow_dispatch`. No scheduled run.
+
+| Job | What it does |
+|---|---|
+| `web` | lint, test, build |
+| `database` | starts PostgreSQL 18, runs `prisma db push` and the seed against it, asserts the seeded tables are not empty, and asserts the seed still refuses a non-local host |
+| `readme-pair` | regenerates `README-light.md` and fails if it drifted |
+| `audit` | `npm run audit:ci`, see below |
+| `hygiene` | no emoji, em dashes or decorative arrows |
+
+**The `database` job is the one that earns its keep.** Without it the schema is
+only ever exercised by whatever happens to be on a developer's machine, and a
+change that cannot build a database from nothing is not discovered until a fresh
+clone fails. It also runs the seed guard in both directions: the local host
+succeeds, and a remote host must fail. Weakening the guard therefore breaks CI
+rather than quietly becoming dangerous.
+
+### Why the audit is a script and not `npm audit`
+
+`npm audit --omit=dev` is the usual gate and it is wrong here. `prisma` is an
+**optional peer dependency** of `@prisma/client`, so the CLI counts as part of
+the production tree even though it is a build-time tool in `devDependencies`.
+Everything it carries, including the MySQL driver this Postgres app never loads,
+is reported as shipping.
+
+Lowering the gate to `--audit-level=critical` would hide real findings. So
+`scripts/audit.mjs` names each accepted advisory with the reason it cannot run
+here, fails on anything unexplained, **and fails on an exception that is no
+longer reported**, so entries cannot outlive the problem they excuse.
+
 ## Gotchas
 
 - **Do not add `src/app/page.js` next to `page.jsx`.** Next resolves `.js`
@@ -267,3 +325,8 @@ Security headers (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`
   `prisma migrate dev` before there is production data to preserve.
 - **There is no automated test suite.** The flows were verified by hand in the
   browser. Adding Playwright would be the natural next step.
+
+---
+
+Minor decisions, dead ends and the reasoning behind small choices are in
+[not_for_you.md](./not_for_you.md).
