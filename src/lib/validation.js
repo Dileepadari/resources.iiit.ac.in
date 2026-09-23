@@ -44,7 +44,17 @@ const httpUrl = z
 
 export const registerSchema = z.object({
   name: trimmed(2, 80, "Name"),
-  email: z.email("Enter a valid email address").trim().toLowerCase().max(160),
+  // Trim and lower-case *before* the format check, not after. `z.email().trim()`
+  // reads as though it cleans the value first, and does the opposite: the
+  // pattern runs on the raw string and the transform only applies to what
+  // survives, so an address pasted with a trailing space was rejected as
+  // invalid rather than tidied up.
+  email: z
+    .string({ error: "Email is required" })
+    .trim()
+    .toLowerCase()
+    .max(160, "Email must be at most 160 characters")
+    .pipe(z.email("Enter a valid email address")),
   password: trimmed(8, 128, "Password").regex(
     /^(?=.*[a-zA-Z])(?=.*\d).*$/,
     "Password must contain at least one letter and one number",
