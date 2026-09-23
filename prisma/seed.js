@@ -3,10 +3,64 @@ const bcrypt = require("bcryptjs");
 const { PrismaPg } = require("@prisma/adapter-pg");
 const { PrismaClient } = require("../src/generated/prisma");
 
+const CONNECTION = process.env.DATABASE_URL;
+
+/**
+ * Refuses to run against anything that is not obviously a local database.
+ *
+ * `main()` below begins with four `deleteMany()` calls: it empties votes,
+ * resources, courses and users before writing anything. That is correct for a
+ * demo seed and catastrophic anywhere else, and the only thing deciding which
+ * database it hits is whatever `DATABASE_URL` happens to be in `.env` at the
+ * time. One stale shell, one copied env file, and `npm run db:seed` quietly
+ * destroys real data and leaves behind an ADMIN account whose password is in
+ * this file and in the repository.
+ *
+ * So: local hosts only, unless someone deliberately sets SEED_FORCE=1.
+ *
+ * @throws Exits non-zero with an explanation rather than deleting anything.
+ */
+function refuseUnlessLocal() {
+  if (!CONNECTION) {
+    console.error("DATABASE_URL is not set. Copy .env.example to .env first.");
+    process.exit(1);
+  }
+  if (process.env.SEED_FORCE === "1") {
+    console.warn("SEED_FORCE=1: skipping the local-database check. Every row will be deleted.");
+    return;
+  }
+
+  let host;
+  try {
+    host = new URL(CONNECTION).hostname;
+  } catch {
+    console.error(`DATABASE_URL is not a URL this script can read: ${CONNECTION}`);
+    process.exit(1);
+  }
+
+  const local = ["localhost", "127.0.0.1", "::1", "0.0.0.0", "db", "postgres"];
+  if (!local.includes(host)) {
+    console.error(
+      `Refusing to seed ${host}.\n` +
+        "This script deletes every vote, resource, course and user before it writes,\n" +
+        "and it creates an ADMIN account whose password is committed to this repository.\n" +
+        "It is meant for the local container started by `npm run db:up`.\n\n" +
+        "If you really mean it, re-run with SEED_FORCE=1.",
+    );
+    process.exit(1);
+  }
+}
+
+refuseUnlessLocal();
+
 const prisma = new PrismaClient({
-  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
+  adapter: new PrismaPg({ connectionString: CONNECTION }),
 });
 
+// Demo accounts. These passwords are public: they are in this file, in the
+// repository, and in the README. They exist so the local container has
+// something to log in with, and they are the second reason this script refuses
+// to run anywhere but localhost.
 const USERS = [
   { name: "Dileep Adari", email: "dileep@students.iiit.ac.in", password: "password123", role: "ADMIN" },
   { name: "Ananya Rao", email: "ananya@students.iiit.ac.in", password: "password123", role: "STUDENT" },
