@@ -41,25 +41,66 @@ keep it: Drive, GitHub, YouTube or a course page.
 
 ## Screenshots
 
-This page shows **dark mode**; the same gallery in light mode is at
-**[README-light.md](./README-light.md)**.
+Every image is a real 1440x900 viewport render against a local stack with the seed data. This page shows **dark mode**; the same gallery in light mode is at **[README-light.md](./README-light.md)**.
 
-| | |
-|---|---|
-| **Home** <br> What the library holds, and what was added recently <br><br> <img src="docs/screenshots/light/01-home.png" alt="Home page" loading="lazy"> | **Courses** <br> Search by name, code, description or instructor, and filter by tag <br><br> <img src="docs/screenshots/light/02-courses.png" alt="Course list" loading="lazy"> |
-| **A course** <br> Everything shared for it, ordered by upvotes and filterable by type <br><br> <img src="docs/screenshots/light/03-course-detail.png" alt="Course page" loading="lazy"> | **Your profile** <br> What you added, what you shared, and the upvotes it earned <br><br> <img src="docs/screenshots/light/06-profile.png" alt="Profile page" loading="lazy"> |
-| **Sign in** <br> Browsing needs no account; contributing does <br><br> <img src="docs/screenshots/light/04-sign-in.png" alt="Sign in page" loading="lazy"> | **Add a course** <br> Create the page first, then hang resources off it <br><br> <img src="docs/screenshots/light/07-add-course.png" alt="Add a course form" loading="lazy"> |
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <img src="./docs/screenshots/light/01-home.png" alt="Home page: what the library holds and the most recent additions" loading="lazy">
+      <p align="center"><b>Home</b><br><sub>What the library holds, and what was added recently.</sub></p>
+    </td>
+    <td width="33%" valign="top">
+      <img src="./docs/screenshots/light/02-courses.png" alt="Course list with the search box, tag filters and sort control" loading="lazy">
+      <p align="center"><b>Courses</b><br><sub>Search by name, code, description or instructor, and filter by tag.</sub></p>
+    </td>
+    <td width="33%" valign="top">
+      <img src="./docs/screenshots/light/03-course-detail.png" alt="Course page: its resources ordered by upvotes, filterable by type" loading="lazy">
+      <p align="center"><b>A course</b><br><sub>Everything shared for it, ordered by upvotes and filterable by type.</sub></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="33%" valign="top">
+      <img src="./docs/screenshots/light/06-profile.png" alt="Profile page: courses added, resources shared and the upvotes they earned" loading="lazy">
+      <p align="center"><b>Your profile</b><br><sub>What you added, what you shared, and the upvotes it earned.</sub></p>
+    </td>
+    <td width="33%" valign="top">
+      <img src="./docs/screenshots/light/07-add-course.png" alt="Add a course form, with the fields a new course page needs" loading="lazy">
+      <p align="center"><b>Add a course</b><br><sub>Create the page first, then hang resources off it.</sub></p>
+    </td>
+    <td width="33%" valign="top">
+      <img src="./docs/screenshots/light/04-sign-in.png" alt="Sign in page, reached only when contributing or voting" loading="lazy">
+      <p align="center"><b>Sign in</b><br><sub>Browsing needs no account; contributing does.</sub></p>
+    </td>
+  </tr>
+</table>
 
-<p align="center"><b>About</b> &middot; why the library exists, and the rules of the road</p>
-<p align="center"><img src="docs/screenshots/light/05-about.png" alt="About page" loading="lazy"></p>
+<details>
+<summary><b>About</b></summary>
+<br>
+<img src="./docs/screenshots/light/05-about.png" alt="About page: why the library exists and the rules of the road" loading="lazy">
+</details>
 
 ### Responsive
 
-Captured at 390x844 and 820x1180. No horizontal overflow at either width.
+Each image is its own device viewport, not a crop of the desktop layout. No horizontal
+overflow at either width.
 
-| Mobile, home | Mobile, courses | Tablet, courses |
-|---|---|---|
-| <img src="docs/screenshots/responsive/mobile-home.png" alt="Home at 390px" loading="lazy"> | <img src="docs/screenshots/responsive/mobile-courses.png" alt="Courses at 390px" loading="lazy"> | <img src="docs/screenshots/responsive/tablet-courses.png" alt="Courses at 820px" loading="lazy"> |
+<table>
+  <tr>
+    <td width="25%" valign="top">
+      <img src="./docs/screenshots/responsive/mobile-home.png" alt="Home at 390px wide" loading="lazy">
+      <p align="center"><sub><b>Home</b><br>390 x 844</sub></p>
+    </td>
+    <td width="25%" valign="top">
+      <img src="./docs/screenshots/responsive/mobile-courses.png" alt="Courses at 390px wide" loading="lazy">
+      <p align="center"><sub><b>Courses</b><br>390 x 844</sub></p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="./docs/screenshots/responsive/tablet-courses.png" alt="Courses at 820px wide" loading="lazy">
+      <p align="center"><sub><b>Courses</b><br>820 x 1180</sub></p>
+    </td>
+  </tr>
+</table>
 
 ## What you can do
 
